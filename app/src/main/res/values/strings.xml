@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Presidents</string>
+    <string name="upload_a_photo">Upload a Photo</string>
+    <string name="take_a_photo">Take a Photo</string>
+    <string name="done">Done</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

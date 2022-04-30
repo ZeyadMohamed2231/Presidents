@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".CapturePhotoFragment">
+
+<ImageView
+    android:id="@+id/image"
+    android:layout_margin="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"/>
+
+<LinearLayout
+    android:gravity="center"
+    android:layout_margin="20dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_take_photo"
+        app:cornerRadius="10dp"
+        android:text="@string/take_a_photo"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_upload_photo"
+        app:cornerRadius="10dp"
+        android:text="@string/upload_a_photo"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
+
+
+<com.google.android.material.button.MaterialButton
+    android:layout_gravity="center"
+    android:id="@+id/Done"
+    app:cornerRadius="10dp"
+    android:text="@string/done"
+    android:textAllCaps="false"
+    android:layout_margin="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"/>
+
+
+
+</LinearLayout>
