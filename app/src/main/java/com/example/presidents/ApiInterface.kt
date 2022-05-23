@@ -1,14 +1,11 @@
 package com.example.presidents
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import java.io.File
+import retrofit2.http.*
 
 interface ApiInterface {
+    @Multipart
     @POST("predict")
-    fun storePost(@Body map:HashMap<String, String>): Call<MyData>
+    fun storePost(@Part image: MultipartBody.Part): Call<MyData>
 }

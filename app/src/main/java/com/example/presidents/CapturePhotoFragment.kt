@@ -1,7 +1,9 @@
 package com.example.presidents
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -13,10 +15,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,11 +31,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
-
-private const val FILE_NAME = "photo.jpg"
+private const val FILE_NAME = "photo"
 private const val REQUEST_CODE=42
 private lateinit var photoFile:File
-const val BASE_URL = "http://192.168.1.7:5000/"
+const val BASE_URL = "http://192.168.1.3:5000/"
+
 
 
 class CapturePhotoFragment : Fragment() {
@@ -46,156 +53,114 @@ class CapturePhotoFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_capture_photo, container, false)
 
-        val bt_take_photo = view.findViewById<Button>(R.id.bt_take_photo)
-        bt_take_photo.setOnClickListener {
+        val btTakePhoto = view.findViewById<Button>(R.id.bt_take_photo)
+        btTakePhoto.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
             photoFile = getPhotoFile(FILE_NAME)
-
            val fileProvider = FileProvider.getUriForFile(requireActivity(),"com.example.fileprovider", photoFile)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,fileProvider)
-
             if (takePictureIntent.resolveActivity(requireActivity().packageManager)!=null){
-
                 startActivityForResult(takePictureIntent,REQUEST_CODE)
             }else{
                 Toast.makeText(activity,"Unable to open Camera",Toast.LENGTH_LONG).show()
             }
         }
 
+        val btUploadPhoto = view.findViewById<Button>(R.id.bt_upload_photo)
+        btUploadPhoto.setOnClickListener {
+            Log.d("MainWork", "Worked: ")
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val intent = Intent()
+                Log.d("MainWork", "Worked:2 ")
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_GET_CONTENT
+                photoFile = getPhotoFile(FILE_NAME)
+                Log.d("MainWork", "onCreateView: "+photoFile)
+                startActivityForResult(intent, REQUEST_CODE)
+                Log.d("MainWork", "Worked: 3")
+
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
+                Log.d("MainWork", "NOTWorked: ")
+            }
+        }
+
+
+
         val btPredict = view.findViewById<Button>(R.id.Predict)
         btPredict.setOnClickListener {
 
-            Log.d("MainWork", "Photo_URL" + photoFile)
-            Log.d("MainWork", "Store is Running")
             storeMyData(photoFile)
         }
 
         return view
     }
 
-//
-//    private fun storeMyData(photo: File) {
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .build()
-//            .create(ApiInterface::class.java)
-//
-//        val jsonObject = JSONObject()
-//
-//        jsonObject.put("image", photo)
-//
-//        val jsonObjectString = jsonObject.toString()
-//
-//        val retrofitData = retrofit.storePost(jsonObjectString)
-//
-//        retrofitData.enqueue(object : Callback<MyData?> {
-//            override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
-//                Log.d("MainWork", "OnResponse Running")
-//                val responseBody = response.body()
-//                Log.d("MainWork", "OnResponse: "+responseBody)
-//            }
-//
-//            override fun onFailure(call: Call<MyData?>, t: Throwable) {
-//                Log.d("MainWork", "onFailure: "+t.message)
-//            }
-//        })
-//
-//
-//    }
 
-    private fun storeMyData(photo: File) {
+
+
+
+
+    private fun storeMyData(file: File) {
 
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
-            .create(ApiInterface::class.java)
-
-        val maps :HashMap<String, String> = HashMap()
-
-
-        Log.d("MainWork", "OnResponse Running1"+photo.name)
-        val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
-
-        maps.put("image", takenImage.toString() )
-
-        Log.d("MainWork", "OnResponse Running"+maps)
 
 
 
-        val retrofitData = retrofitBuilder.storePost(maps)
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
 
-        Log.d("MainWork", "OnResponse Running"+retrofitData)
+        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+
+        val apiService: ApiInterface = retrofitBuilder.create(ApiInterface::class.java)
+
+        val retrofitData: Call<MyData> = apiService.storePost(body)
+
+
+
 
         retrofitData.enqueue(object : Callback<MyData?> {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
-                Log.d("MainWork", "OnResponse Running")
-                val responseBody = response.body()
-                Log.d("MainWork", "OnResponse: "+ responseBody)
+                if (response.isSuccessful) {
+                    val txt = view?.findViewById<TextView>(R.id.presidents)
+                    txt?.text = response.body().toString()
+
+                }
             }
 
             override fun onFailure(call: Call<MyData?>, t: Throwable) {
-                Log.d("MainWork", "onFailure: "+t.message)
+                Toast.makeText(activity,"SERVER_ERROR (Try Again)",Toast.LENGTH_LONG).show()
             }
         })
     }
 
 
-//    private fun getMyData() {
-//        val retrofitBuilder = Retrofit.Builder()
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .baseUrl(BASE_URL)
-//            .build()
-//            .create(ApiInterface::class.java)
-//
-//        Log.d("MainWork", "getMyData: 1")
-//        val retrofitData = retrofitBuilder.getData()
-//        Log.d("MainWork", "getMyData: 2")
-//        retrofitData.enqueue(object : Callback<MyData?> {
-//            override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
-//                Log.d("MainWork", "getMyData: 3")
-//                val responseBody = response.body()!!
-//                Log.d("MainWork", "getMyData: 4"+responseBody)
-//
-//
-//                val txt = view!!.findViewById<TextView>(R.id.presidents)
-//                txt.text= responseBody.toString()
-//
-//
-//                Log.d("MainWork", "getMyData: 4")
-//
-//
-//
-//            }
-//
-//            override fun onFailure(call: Call<MyData?>, t: Throwable) {
-//                Log.d("Main", "onFailure: "+t.message)
-//            }
-//        })
-//    }
-
     private fun getPhotoFile(fileName: String): File {
-
-       val storageDir = getActivity()?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+       val storageDir = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(fileName,".jpg",storageDir)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
-//           val takenImage = data?.extras?.get("data")
+
 
             val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
-
-
            val imageView = view?.findViewById<ImageView>(R.id.image)
-            imageView?.setImageBitmap(takenImage as Bitmap?)
+            imageView?.setImageBitmap(takenImage)
 
-            Log.d("MainWork", "imageView: "+ takenImage )
 
-            Log.d("MainWork", "imageView: "+ takenImage as Bitmap )
-            Log.d("MainWork", "imageView: "+ imageView)
 
         }else {
             super.onActivityResult(requestCode, resultCode, data)

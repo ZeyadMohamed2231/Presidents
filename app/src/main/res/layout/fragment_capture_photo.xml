@@ -5,11 +5,24 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-tools:context=".CapturePhotoFragment">
+tools:context=".CapturePhotoFragment"
+    android:background="#20a1ed">
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="70dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#ffea00"
+        android:text="@string/sign_translator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 <ImageView
 
+    android:src="@drawable/sign"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +41,8 @@ tools:context=".CapturePhotoFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_take_photo"
+        android:backgroundTint="#ffea00"
+        android:textColor="#0651b4"
         app:cornerRadius="10dp"
         android:text="@string/take_a_photo"
         android:textAllCaps="false"
@@ -38,6 +53,8 @@ tools:context=".CapturePhotoFragment">
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_upload_photo"
         app:cornerRadius="10dp"
+        android:backgroundTint="#ffea00"
+        android:textColor="#0651b4"
         android:text="@string/upload_a_photo"
         android:textAllCaps="false"
         android:layout_margin="10dp"
@@ -54,7 +71,8 @@ tools:context=".CapturePhotoFragment">
         android:layout_height="wrap_content"
         >
         <com.google.android.material.button.MaterialButton
-
+            android:backgroundTint="#ffea00"
+            android:textColor="#0651b4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout1"
@@ -70,7 +88,6 @@ tools:context=".CapturePhotoFragment">
         <TextView
             android:id="@+id/presidents"
             android:gravity="center"
-            android:text="@string/app_name"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
