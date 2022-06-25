@@ -34,7 +34,7 @@ import java.io.File
 private const val FILE_NAME = "photo"
 private const val REQUEST_CODE=42
 private lateinit var photoFile:File
-const val BASE_URL = "http://192.168.1.3:5000/"
+const val BASE_URL = "http://192.168.1.2:5000/"
 
 
 
@@ -51,7 +51,7 @@ class CapturePhotoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_capture_photo, container, false)
+        val view = inflater.inflate(R.layout.fragment_capture_photo, container, false) //Calling Fragment Page which is needed
 
         val btTakePhoto = view.findViewById<Button>(R.id.bt_take_photo)
         btTakePhoto.setOnClickListener {
@@ -66,38 +66,11 @@ class CapturePhotoFragment : Fragment() {
             }
         }
 
-        val btUploadPhoto = view.findViewById<Button>(R.id.bt_upload_photo)
-        btUploadPhoto.setOnClickListener {
-            Log.d("MainWork", "Worked: ")
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                val intent = Intent()
-                Log.d("MainWork", "Worked:2 ")
-                intent.type = "image/*"
-                intent.action = Intent.ACTION_GET_CONTENT
-                photoFile = getPhotoFile(FILE_NAME)
-                Log.d("MainWork", "onCreateView: "+photoFile)
-                startActivityForResult(intent, REQUEST_CODE)
-                Log.d("MainWork", "Worked: 3")
-
-            } else {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    1
-                )
-                Log.d("MainWork", "NOTWorked: ")
-            }
-        }
 
 
 
         val btPredict = view.findViewById<Button>(R.id.Predict)
         btPredict.setOnClickListener {
-
             storeMyData(photoFile)
         }
 
@@ -111,29 +84,29 @@ class CapturePhotoFragment : Fragment() {
 
     private fun storeMyData(file: File) {
 
-        val retrofitBuilder = Retrofit.Builder()
+        val retrofitBuilder = Retrofit.Builder()     //create my APIS
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
 
 
 
-        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)    //Take image with class multipart
 
-        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-
-
-        val apiService: ApiInterface = retrofitBuilder.create(ApiInterface::class.java)
-
-        val retrofitData: Call<MyData> = apiService.storePost(body)
+        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)      // key
 
 
+        val apiService: ApiInterface = retrofitBuilder.create(ApiInterface::class.java)     // Build
+
+        val retrofitData: Call<MyData> = apiService.storePost(body)     // Calling APis
 
 
-        retrofitData.enqueue(object : Callback<MyData?> {
+
+
+        retrofitData.enqueue(object : Callback<MyData?> {      // Check if Apis is working or not working: Put Predict in text if not display toast server error
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
                 if (response.isSuccessful) {
-                    val txt = view?.findViewById<TextView>(R.id.presidents)
+                    val txt = view?.findViewById<TextView>(R.id.tv_predict)
                     txt?.text = response.body().toString()
 
                 }
@@ -146,12 +119,12 @@ class CapturePhotoFragment : Fragment() {
     }
 
 
-    private fun getPhotoFile(fileName: String): File {
+    private fun getPhotoFile(fileName: String): File {            // Get Photo from  dict of android
        val storageDir = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(fileName,".jpg",storageDir)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {      // Check in application witch camera if photo is okay so decode it with bitmap or not
         if(requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
 
 

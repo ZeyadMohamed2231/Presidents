@@ -17,7 +17,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textColor="#ffea00"
-            android:text="Sign Translator"
+            android:text="@string/piece_of_care"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

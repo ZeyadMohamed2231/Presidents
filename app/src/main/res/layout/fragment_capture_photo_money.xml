@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context=".CapturePhotoFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CapturePhotoMoneyFragment"
+    android:orientation="vertical"
     android:background="#20a1ed">
 
     <TextView
@@ -15,42 +15,42 @@ tools:context=".CapturePhotoFragment"
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="#ffea00"
-        android:text="@string/sign_translator"
+        android:text="@string/currency_detector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
 
-<ImageView
+    <ImageView
 
-    android:src="@drawable/sign"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/layout1"
-    android:id="@+id/image"
-    android:layout_margin="20dp"
-    android:layout_width="match_parent"
-    android:layout_height="300dp"/>
+        android:src="@drawable/money"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout1"
+        android:id="@+id/image"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
 
-<LinearLayout
-    android:id="@+id/layout1"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_take_photo"
-        android:backgroundTint="#ffea00"
-        android:textColor="#0651b4"
-        app:cornerRadius="10dp"
-        android:text="@string/take_a_photo"
-        android:textAllCaps="false"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_take_photo"
+            android:backgroundTint="#ffea00"
+            android:textColor="#0651b4"
+            app:cornerRadius="10dp"
+            android:text="@string/take_a_photo"
+            android:textAllCaps="false"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
 
 
 
-</LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         app:layout_constraintTop_toBottomOf="@id/layout1"
@@ -85,7 +85,6 @@ tools:context=".CapturePhotoFragment"
 
 
     </LinearLayout>
-
 
 
 

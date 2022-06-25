@@ -6,15 +6,19 @@ import androidx.fragment.app.Fragment
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
     private var mTimer: Timer? = null
     private var mTimerTask: TimerTask? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showFragment(SplashFragment())
         mTimerTask = object : TimerTask() {
             override fun run() {
-                showFragment(CapturePhotoFragment())
+                showFragment(MenuFragment())
             }
         }
         mTimer = Timer()

@@ -7,4 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="predict">Predict</string>
     <string name="sign_translator">Sign Translator</string>
+    <string name="piece_of_care">Piece of Care</string>
+    <string name="currency_detector">Currency Detector</string>
 </resources>
