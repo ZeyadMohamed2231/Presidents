@@ -38,6 +38,7 @@ const val BASE_URL = "http://192.168.1.2:5000/"
 
 
 
+
 class CapturePhotoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
