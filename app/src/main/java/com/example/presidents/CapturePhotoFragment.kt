@@ -34,12 +34,14 @@ import java.io.File
 private const val FILE_NAME = "photo"
 private const val REQUEST_CODE=42
 private lateinit var photoFile:File
-const val BASE_URL = "http://192.168.1.2:5000/"
+const val BASE_URL = "http://192.168.1.3:5000/"
 
 
 
 
 class CapturePhotoFragment : Fragment() {
+    var count = true
+    lateinit var mainText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,8 +111,19 @@ class CapturePhotoFragment : Fragment() {
                 if (response.isSuccessful) {
                     val txt = view?.findViewById<TextView>(R.id.tv_predict)
                     val text = response.body().toString()
-                    val substring = text.subSequence(18, text.length-1)
-                    txt?.text = substring
+                    var substring = text.subSequence(18, text.length-1).toString()
+
+                    if(count){
+                        count= false
+                        txt?.text = substring
+                        mainText = substring
+                    }else if (!count){
+
+                        mainText = mainText.plus(substring)
+                        txt?.text = mainText
+                    }
+
+
                 }
             }
 
