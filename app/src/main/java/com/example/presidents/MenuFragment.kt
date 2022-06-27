@@ -28,6 +28,7 @@ class MenuFragment : Fragment() {
         val btMoney = view.findViewById<ImageButton>(R.id.bt_money)
         val btSign = view.findViewById<ImageButton>(R.id.bt_sign)
 
+
         btMoney.setOnClickListener {
             showFragment(CapturePhotoMoneyFragment())
         }

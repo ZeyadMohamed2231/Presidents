@@ -107,8 +107,9 @@ class CapturePhotoFragment : Fragment() {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
                 if (response.isSuccessful) {
                     val txt = view?.findViewById<TextView>(R.id.tv_predict)
-                    txt?.text = response.body().toString()
-
+                    val text = response.body().toString()
+                    val substring = text.subSequence(18, text.length-1)
+                    txt?.text = substring
                 }
             }
 

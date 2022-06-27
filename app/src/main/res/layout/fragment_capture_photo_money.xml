@@ -38,7 +38,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_take_photo"
+            android:id="@+id/bt_take_photo_CD"
             android:backgroundTint="#ffea00"
             android:textColor="#0651b4"
             app:cornerRadius="10dp"
@@ -67,7 +67,7 @@
             app:layout_constraintTop_toBottomOf="@id/layout1"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_gravity="center"
-            android:id="@+id/Predict"
+            android:id="@+id/bt_Predict_CD"
             app:cornerRadius="10dp"
             android:text="@string/predict"
             android:textAllCaps="false"
